@@ -1,13 +1,14 @@
 {
   "luks_password": "ENC[AES256_GCM,data:6k3cwUw5,iv:+Q6Q+v5ssGB3psMyYiOQeVK8XYu7BGiFQiZz2+lh7wY=,tag:OZg+cuJWXERpSUJlQUt0XA==,type:str]",
+  "wireguard": "ENC[AES256_GCM,data:Pe7Bo3GbPwsl4lRng0ewck302OlWQ6unRZhkU79JLTN8R+L4jYDS7zHuiew=,iv:y1nD+BmsjEIe0fWJjSU4uq6ymLqbc0FSdm21/+qtIXo=,tag:4aTrxpgHNiYOTzWMcWM4SA==,type:str]",
   "sops": {
     "kms": null,
     "gcp_kms": null,
     "azure_kv": null,
     "hc_vault": null,
     "age": null,
-    "lastmodified": "2024-04-29T15:52:17Z",
-    "mac": "ENC[AES256_GCM,data:FWIJ6+KZwB8PWkIuYdbfDpJTsXiNboWUwq3t/7WjQhsewJSgw0RTJTQ9U8fVzmQODtE8Xuai9tkduqB/AAzsyEf81spitloKSRRzi22kR3tI0gqsJuRpmqk/joSPwfQKQQUeBeul5fWnFHs5w9O30QIqV8V9iVTD888ohsnVIAU=,iv:MZkmCvSgcsfLbipH7ZgeF0b9ZvhTiYRQBUBr5YKiS2E=,tag:RkEZHO1YpMHX8n8VwatYZQ==,type:str]",
+    "lastmodified": "2024-07-25T23:03:01Z",
+    "mac": "ENC[AES256_GCM,data:hesY4g1WlKj7M+2NM/aNPVM4m3IOHU6x23OqwaISiHeynB5TjieIZ3VpMEGetLIqi+kdYvKXxwur3NWab3KzI4udoMsozQPR5+SA9jqSNNbrgxIF5h73bNSzmo5QkeXH+vG+AzlCZn2komupFtc3QjQzhmIISTDXUZTlapcm4yY=,iv:t3157ZUM2x38wCcZ/cxwm51opYYmdYMGKEM1GknwTqg=,tag:s7SYsb0+WijdJNNIH1witQ==,type:str]",
     "pgp": [
       {
         "created_at": "2024-04-27T18:27:13Z",
