@@ -43,7 +43,7 @@ in {
         options = {
           name = mkOption {
             type = str;
-            default = username;
+            default = name;
           };
 
           sopsFile = mkOption {
