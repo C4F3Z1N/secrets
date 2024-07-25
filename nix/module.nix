@@ -2,21 +2,21 @@
   config,
   lib,
   options,
-  inputs ? {},
+  inputs ?
+    lib.pipe ./flake.lock [
+      (lib.importJSON)
+      (lib.getAttrFromPath ["nodes" "sops-nix" "locked"])
+      (builtins.flakeRefToString)
+      (builtins.getFlake)
+      (lib.setAttrByPath ["secrets" "inputs" "sops-nix"])
+    ],
   ...
 }:
 with builtins // lib; let
+  inherit (inputs.secrets.inputs) sops-nix;
   cfg = config.secrets;
   sopsCfg = config.sops.secrets;
   defaultSopsFile = ../sops/hosts + "/${config.networking.hostName}.json";
-  sops-nix =
-    attrByPath ["sops-nix"] (pipe ./flake.lock [
-      importJSON
-      (getAttrFromPath ["nodes" "sops-nix" "locked"])
-      flakeRefToString
-      getFlake
-    ])
-    inputs;
 in {
   imports = [sops-nix.nixosModules.sops];
 
