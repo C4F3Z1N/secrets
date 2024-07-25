@@ -1,17 +1,24 @@
-{ config, lib, options, inputs ? { }, ... }:
-with (builtins // lib);
-let
+{
+  config,
+  lib,
+  options,
+  inputs ? {},
+  ...
+}:
+with builtins // lib; let
   cfg = config.secrets;
   sopsCfg = config.sops.secrets;
   defaultSopsFile = ../sops/hosts + "/${config.networking.hostName}.json";
-  sops-nix = attrByPath [ "sops-nix" ] (pipe ./flake.lock [
-    (importJSON)
-    (getAttrFromPath [ "nodes" "sops-nix" "locked" ])
-    (flakeRefToString)
-    (getFlake)
-  ]) inputs;
+  sops-nix =
+    attrByPath ["sops-nix"] (pipe ./flake.lock [
+      importJSON
+      (getAttrFromPath ["nodes" "sops-nix" "locked"])
+      flakeRefToString
+      getFlake
+    ])
+    inputs;
 in {
-  imports = [ sops-nix.nixosModules.sops ];
+  imports = [sops-nix.nixosModules.sops];
 
   options.secrets = with types; {
     enable = mkOption {
@@ -32,14 +39,18 @@ in {
     paths = mkOption {
       type = attrs;
       default = pipe defaultSopsFile [
-        (importJSON)
+        importJSON
         (filterAttrs (key: _: key != "sops"))
         (mapAttrs (key: _: sopsCfg."${key}".path))
       ];
     };
 
     users = mkOption {
-      type = attrsOf (submodule ({ name, config, ... }: {
+      type = attrsOf (submodule ({
+        name,
+        config,
+        ...
+      }: {
         options = {
           name = mkOption {
             type = str;
@@ -55,11 +66,10 @@ in {
             type = attrs;
             default = pipe sopsCfg [
               (filterAttrs (key: _: hasPrefix "${name}/" key))
-              (mapAttrs' (key:
-                { path, ... }: {
-                  name = removePrefix "${name}/" key;
-                  value = path;
-                }))
+              (mapAttrs' (key: {path, ...}: {
+                name = removePrefix "${name}/" key;
+                value = path;
+              }))
             ];
           };
         };
@@ -68,7 +78,7 @@ in {
       default = pipe ../sops/users [
         (filesystem.listFilesRecursive)
         (map (sopsFile:
-          nameValuePair (removeSuffix ".json" (baseNameOf sopsFile)) { }))
+            nameValuePair (removeSuffix ".json" (baseNameOf sopsFile)) {}))
         listToAttrs
       ];
     };
@@ -77,7 +87,7 @@ in {
   config = mkIf cfg.enable {
     sops = rec {
       inherit defaultSopsFile;
-      age.sshKeyPaths = lib.mkForce [ ];
+      age.sshKeyPaths = lib.mkForce [];
       defaultSopsFormat = "json";
 
       gnupg = {
@@ -86,30 +96,33 @@ in {
       };
 
       secrets = pipe cfg.users [
-        (mapAttrs (username:
-          { sopsFile, ... }:
+        (mapAttrs (username: {sopsFile, ...}:
           pipe sopsFile [
-            (importJSON)
-            (attrNames)
+            importJSON
+            attrNames
             (filter (key: key != "sops"))
-            (map (key: { inherit key sopsFile username; }))
+            (map (key: {inherit key sopsFile username;}))
           ]))
         attrValues
         flatten
-        (map ({ key, sopsFile, username, }:
+        (map ({
+          key,
+          sopsFile,
+          username,
+        }:
           nameValuePair "${username}/${key}" {
             inherit key sopsFile;
             format = "json";
-            neededForUsers = (key == "password");
+            neededForUsers = key == "password";
           }))
         listToAttrs
       ];
     };
 
-    users.users = mapAttrs (_:
-      { paths, ... }:
+    users.users = mapAttrs (_: {paths, ...}:
       mkIf (paths ? password) {
         hashedPasswordFile = mkDefault paths.password;
-      }) cfg.users;
+      })
+    cfg.users;
   };
 }

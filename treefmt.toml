@@ -1,11 +1,11 @@
 # One CLI to format the code tree - https://github.com/numtide/treefmt
 
 [formatter.nixfmt]
-command = "nix"
-options = ["run", "nixpkgs#nixfmt"]
-includes = ["*.nix"]
+command = 'nix'
+includes = ['*.nix']
+options = ['run', 'nixpkgs#alejandra']
 
 [formatter.prettier]
-command = "nix"
-options = ["run", "nixpkgs#nodePackages.prettier", "--", "--write"]
-includes = ["*.json", "*.lock", "*.yml", "*.yaml"]
+command = 'nix'
+includes = ['*.json', '*.lock', '*.yml', '*.yaml']
+options = ['run', 'nixpkgs#nodePackages.prettier', '--', '--write']

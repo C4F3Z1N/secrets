@@ -7,7 +7,7 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ nixpkgs, ... }: {
+  outputs = inputs @ {nixpkgs, ...}: {
     nixosModules = rec {
       default = secrets;
       secrets = import ./module.nix;
