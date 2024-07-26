@@ -1,6 +1,7 @@
 keys:
   - &hosts:
     - &lelia 887556E0517635509C7DD736059FFB306AD26DCB
+    - &sueli 43FD580749D9A3C3C495EDA2D0FBB7A51156AB7C
   - &users:
     - &joao 724A264781B08135FE89E9FDBE4D78290B7222EA
 
@@ -16,8 +17,15 @@ creation_rules:
           - *joao
           - *lelia
 
+  - path_regex: sops/hosts/sueli.json$
+    key_groups:
+      - pgp:
+          - *joao
+          - *sueli
+
   - path_regex: sops/users/.*.json$
     key_groups:
       - pgp:
           - *joao
           - *lelia
+          - *sueli
