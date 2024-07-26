@@ -6,7 +6,7 @@ keys:
     - &joao 724A264781B08135FE89E9FDBE4D78290B7222EA
 
 creation_rules:
-  - path_regex: sops/hosts/master.json$
+  - path_regex: sops/hosts/master-keys.json$
     key_groups:
       - pgp:
           - *joao
