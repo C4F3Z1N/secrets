@@ -1,6 +1,6 @@
 # One CLI to format the code tree - https://github.com/numtide/treefmt
 
-[formatter.nixfmt]
+[formatter.alejandra]
 command = 'nix'
 includes = ['*.nix']
 options = ['run', 'nixpkgs#alejandra']
