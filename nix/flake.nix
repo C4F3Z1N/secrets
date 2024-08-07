@@ -1,5 +1,5 @@
 {
-  description = "My secrets";
+  description = "Hosts and their secrets pre-configured with sops-nix";
 
   inputs = {
     # deduplication;
