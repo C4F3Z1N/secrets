@@ -1,21 +1,21 @@
 {lib}:
 with builtins // lib; let
-  users = lib.pipe ../sops/users [
-    (lib.filesystem.listFilesRecursive)
+  users = pipe ../sops/users [
+    (filesystem.listFilesRecursive)
     # `-> [ ../sops/users/user0.json ../sops/users/user1.json ... ]
     (map (value: {
       inherit value;
-      name = lib.removeSuffix ".json" (baseNameOf value);
+      name = removeSuffix ".json" (baseNameOf value);
     }))
     # `-> [ { name = "user0"; value = ../sops/users/user0.json; } ... ]
-    (builtins.listToAttrs)
+    listToAttrs
     # `-> { user0 = ../sops/users/user0.json; ... }
   ];
 in
-  lib.pipe users [
-    (lib.mapAttrsToList (user: sopsFile: {
+  pipe users [
+    (mapAttrsToList (user: sopsFile: {
       inherit user sopsFile;
-      keys = builtins.attrNames (lib.importJSON sopsFile);
+      keys = attrNames (importJSON sopsFile);
       # `-> [ "secret0" "secret1" "sops" ... ]
     }))
     # `-> [ { user = "user0"; sopsFile = ../sops/users/user0.json; keys = [ ... ]; } ... ]
@@ -24,13 +24,13 @@ in
       user,
       sopsFile,
     }:
-      lib.genAttrs keys (key: {inherit key user sopsFile;})))
+      genAttrs keys (key: {inherit key user sopsFile;})))
     # `-> [ { secret0 = { key = "secret0"; user = "user0"; sopsFile = ...; }; } ... ]
-    (map (builtins.attrValues))
+    (map attrValues)
     # `-> [ [ { key = "secret0"; ... } ... ] ... ]
-    (lib.flatten)
+    flatten
     # `-> [ { key = "secret0"; ... } ... ]
-    (builtins.filter ({key, ...}: key != "sops"))
+    (filter ({key, ...}: key != "sops"))
     # `-> "sops" shouldn't be included (metadata);
     (map ({
       key,
@@ -44,6 +44,6 @@ in
       };
     }))
     # `-> [ { name = "user0/secret0"; value = { key = "secret0"; ... }; } ... ]
-    (builtins.listToAttrs)
+    listToAttrs
     # `-> { "user0/secret0" = { ... }; "user0/secret1" = { ... }; "user1/secret0" = { ... }; ... }
   ]
