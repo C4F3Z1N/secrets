@@ -7,5 +7,14 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs @ {nixpkgs, ...}: {};
+  outputs = inputs @ {
+    nixpkgs,
+    sops-nix,
+    ...
+  }: {
+    nixosConfigurations = import ./hosts.nix {
+      inherit (nixpkgs) lib;
+      inherit sops-nix;
+    };
+  };
 }
