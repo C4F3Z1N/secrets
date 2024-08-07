@@ -23,13 +23,13 @@ in
       specialArgs.publicKeys = importJSON ../public.json;
       modules = [
         sops-nix.nixosModules.sops
-        {
+        ({config, ...}: {
           sops = {
             inherit defaultSopsFile;
             defaultSopsFormat = "json";
-            secrets = import ./users.nix {inherit lib;};
+            secrets = import ./users.nix {inherit config lib;};
           };
-        }
+        })
       ];
     })
   hosts

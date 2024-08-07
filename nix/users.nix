@@ -1,4 +1,7 @@
-{lib}:
+{
+  config,
+  lib,
+}:
 with builtins // lib; let
   users = pipe ../sops/users [
     (filesystem.listFilesRecursive)
@@ -36,14 +39,12 @@ in
       key,
       user,
       sopsFile,
-    }: {
-      name = "${user}/${key}";
-      value = {
-        inherit key sopsFile;
-        format = "json";
-      };
-    }))
-    # `-> [ { name = "user0/secret0"; value = { key = "secret0"; ... }; } ... ]
-    listToAttrs
-    # `-> { "user0/secret0" = { ... }; "user0/secret1" = { ... }; "user1/secret0" = { ... }; ... }
+    }:
+      mkIf (hasAttr user config.users.users) {
+        "${user}/${key}" = {
+          inherit key sopsFile;
+          format = "json";
+        };
+      }))
+    mkMerge
   ]
