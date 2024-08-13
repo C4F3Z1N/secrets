@@ -44,6 +44,7 @@ in
         "${user}/${key}" = {
           inherit key sopsFile;
           format = "json";
+          neededForUsers = key == "password";
         };
       }))
     mkMerge
