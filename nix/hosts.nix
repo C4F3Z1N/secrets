@@ -20,7 +20,7 @@ in
   # .-> { host0 = nixosSystem { ... }; host1 = nixosSystem { ... }; ... }
   mapAttrs (_: defaultSopsFile:
     nixosSystem {
-      specialArgs.publicKeys = importJSON ../public.json;
+      specialArgs.public = importJSON ../public.json;
       modules = [
         sops-nix.nixosModules.sops
         ({config, ...}: {
