@@ -7,5 +7,5 @@ options = ['run', 'nixpkgs#alejandra']
 
 [formatter.prettier]
 command = 'nix'
-includes = ['*.json', '*.lock', '*.yml', '*.yaml']
+includes = ['*.json', '*.yml', '*.yaml', 'flake.lock']
 options = ['run', 'nixpkgs#nodePackages.prettier', '--', '--write']
