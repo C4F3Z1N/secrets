@@ -2,6 +2,7 @@ keys:
   - &hosts:
     - &alzira 35D4F66AB7238710367EDE58C3D9038103F73D86
     - &carolina C450885D4235930EAA8790FEEEBAF750A26D7222
+    - &firmina 1CC6D084CB840541C1A303A7BE4813403351FABD
     - &lelia 887556E0517635509C7DD736059FFB306AD26DCB
     - &sueli 43FD580749D9A3C3C495EDA2D0FBB7A51156AB7C
   - &users:
@@ -25,6 +26,12 @@ creation_rules:
           - *carolina
           - *joao
 
+  - path_regex: sops/hosts/firmina.json$
+    key_groups:
+      - pgp:
+          - *firmina
+          - *joao
+
   - path_regex: sops/hosts/lelia.json$
     key_groups:
       - pgp:
@@ -41,6 +48,8 @@ creation_rules:
     key_groups:
       - pgp:
           - *alzira
+          - *carolina
+          - *firmina
           - *joao
           - *lelia
           - *sueli
