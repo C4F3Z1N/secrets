@@ -1,19 +1,25 @@
 {
-  description = "Hosts and their secrets pre-configured with sops-nix";
+  description = "Hosts, services, users and their secrets pre-configured with sops-nix";
 
-  inputs.sops-nix.inputs = {
-    nixpkgs-stable.follows = "nixpkgs";
-    nixpkgs.follows = "nixpkgs";
+  inputs = {
+    # deduplication;
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+    sops-nix.inputs.nixpkgs-stable.follows = "nixpkgs";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
+    flake-parts,
     nixpkgs,
     sops-nix,
+    systems,
     ...
-  }: {
-    nixosConfigurations = import ./hosts.nix {
-      inherit (nixpkgs) lib;
-      inherit sops-nix;
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      flake = {lib, ...}: {
+        nixosConfigurations = import ./hosts.nix {inherit lib sops-nix;};
+      };
+
+      systems = import systems;
     };
-  };
 }
