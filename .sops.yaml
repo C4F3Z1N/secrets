@@ -44,7 +44,7 @@ creation_rules:
           - *joao
           - *sueli
 
-  - path_regex: sops/users/.*.json$
+  - path_regex: sops/(services|users)/.*.json$
     key_groups:
       - pgp:
           - *alzira

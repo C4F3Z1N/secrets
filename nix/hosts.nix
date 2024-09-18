@@ -27,7 +27,10 @@ in
           sops = {
             inherit defaultSopsFile;
             defaultSopsFormat = "json";
-            secrets = import ./users.nix {inherit config lib;};
+            secrets = mkMerge [
+              (import ./services.nix {inherit config lib;})
+              (import ./users.nix {inherit config lib;})
+            ];
           };
         })
       ];
