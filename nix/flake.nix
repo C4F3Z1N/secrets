@@ -1,5 +1,5 @@
 {
-  description = "Hosts, services, users and their secrets pre-configured with sops-nix";
+  description = "Personalized abstraction of secrets using sops-nix";
 
   inputs = {
     # deduplication;
@@ -7,5 +7,10 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = {nixpkgs, ...}: {};
+  outputs = {nixpkgs, ...}: {
+    nixosModules = rec {
+      default = secrets;
+      secrets = import ./module.nix;
+    };
+  };
 }
