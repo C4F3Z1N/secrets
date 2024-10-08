@@ -1,19 +1,16 @@
 {
-  description = "Hosts and their secrets pre-configured with sops-nix";
+  description = "Personalized abstraction of secrets using sops-nix";
 
-  inputs.sops-nix.inputs = {
-    nixpkgs-stable.follows = "nixpkgs";
-    nixpkgs.follows = "nixpkgs";
+  inputs = {
+    # deduplication;
+    sops-nix.inputs.nixpkgs-stable.follows = "nixpkgs";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    sops-nix,
-    ...
-  }: {
-    nixosConfigurations = import ./hosts.nix {
-      inherit (nixpkgs) lib;
-      inherit sops-nix;
+  outputs = {nixpkgs, ...}: {
+    nixosModules = rec {
+      default = secrets;
+      secrets = import ./module.nix;
     };
   };
 }
